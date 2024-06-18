@@ -5,4 +5,11 @@ from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Userfields = ["id", "username", "password"]
+        model = User
+        fields = ["id", "username", "password"]
+        # addings settings for model fields without explicitly defining them in the serializer
+        extra_kwargs = {"password" : {"write_only": True}} # write_only makes it such that it is not included in the serialized output.
+
+    def create(self, validated_data):
+                user = User.objects.create_user(**validated_data)
+                return user
