@@ -16,9 +16,9 @@ class UserSerializer(serializers.ModelSerializer):
                 return user
     
 
-class NoteSerializer(serializers.ModelField):
+class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = ["id", "title", "content", "created_at", "author"]
-        extra_kwards = {"author": {"read_only": True}} # only read who the author is but not write.
+        extra_kwargs = {"author": {"read_only": True}} # only read who the author is but not write.
 
