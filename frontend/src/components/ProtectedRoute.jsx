@@ -1,27 +1,23 @@
-// wrapper for protected route
-    // handles user authentication for accessing protected routes withint the application
-
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import api from "../api";
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "../constants";
 import { useState, useEffect } from "react";
 
-// check if we are authorized below they can access the route.
+
 function ProtectedRoute({ children }) {
-    const [isAuthorized, setIsAuthorized] = useState(null); // neither authorized or unuthorized
+    const [isAuthorized, setIsAuthorized] = useState(null);
 
     useEffect(() => {
-        auth().catch(() => setIsAuthorized(false)) // 'auth()' function checks for an existing access token.
-                                                   // if present, decodes the token to check the expiration.
+        auth().catch(() => setIsAuthorized(false))
     }, [])
 
-    const refreshToken = async () => { // refresh's access token automatically if the token is expired. makes an API call to refresh the token using a refresh token in the 'localStorage'
+    const refreshToken = async () => {
         const refreshToken = localStorage.getItem(REFRESH_TOKEN);
         try {
             const res = await api.post("/api/token/refresh/", {
                 refresh: refreshToken,
-            }); // try to send a response to the route with the refresh_token which should get the new access token.
+            });
             if (res.status === 200) {
                 localStorage.setItem(ACCESS_TOKEN, res.data.access)
                 setIsAuthorized(true)
@@ -34,7 +30,7 @@ function ProtectedRoute({ children }) {
         }
     };
 
-    const auth = async () => { // checks if we need to refresh the token
+    const auth = async () => {
         const token = localStorage.getItem(ACCESS_TOKEN);
         if (!token) {
             setIsAuthorized(false);
@@ -42,7 +38,7 @@ function ProtectedRoute({ children }) {
         }
         const decoded = jwtDecode(token);
         const tokenExpiration = decoded.exp;
-        const now = Date.now() / 1000; // date in seconds
+        const now = Date.now() / 1000;
 
         if (tokenExpiration < now) {
             await refreshToken();
