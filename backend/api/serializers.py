@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import Note
 
 # take python object and convert to JSON data & vice-versa;
+# this is crazy
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
