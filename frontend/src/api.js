@@ -7,8 +7,10 @@ import { ACCESS_TOKEN } from "./constants";
 
 const apiUrl = "/choreo-apis/djangoreactnoteapp/backend/v1";
 
+const baseUrl = apiUrl;
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : apiUrl, // import anything specified in an env variable file.
+  baseURL: baseUrl // import anything specified in an env variable file.
 });
 
 api.interceptors.request.use(
